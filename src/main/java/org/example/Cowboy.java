@@ -4,11 +4,11 @@ import java.util.stream.IntStream;
 import java.util.Random;
 
 public class Cowboy {
-    public final int index;
+    public final int id;
     public int healthPoints;
-    public Cowboy(int index){
+    public Cowboy(int id){
         this.healthPoints = 10;
-        this.index = index;
+        this.id = id;
     }
 
     public static ArrayList<Cowboy> createCowboyArray(int cowboyAmount){
@@ -18,14 +18,13 @@ public class Cowboy {
     return  cowboys;
     }
 
-    public static int[] shootCowboy(int shooterIndex, ArrayList<Cowboy> cowboys) {
+    public static void shootCowboy(int shooterIndex, ArrayList<Cowboy> cowboys) {
         if (cowboys.size() <= 1) {
-            return new int[] { 0 };
+            return;
         }
 
         Random random = new Random();
         int damage = random.nextInt(1, 6);
-
         Cowboy shooter = cowboys.get(shooterIndex);
 
         int targetIndex = (shooter.healthPoints % 2 != 0) ? (shooterIndex == 0 ? cowboys.size() - 1 : shooterIndex - 1)
@@ -35,10 +34,7 @@ public class Cowboy {
         int targetPrevHealth = target.healthPoints;
         target.healthPoints -= damage;
 
-        int[] shooterInfo = new int[3];
-        shooterInfo[0] = shooterIndex;
-        shooterInfo[1] = targetIndex;
-        shooterInfo[2] = damage;
+
 
         if (target.healthPoints <= 0) {
             cowboys.remove(targetIndex);
@@ -46,14 +42,15 @@ public class Cowboy {
 
         ShootingStoringFile.saveShootingRound(
                 "shooting-log.json",
+                shooter.id,
                 shooterIndex,
+                target.id,
                 targetIndex,
                 targetPrevHealth,
                 damage,
                 target.healthPoints
         );
 
-        return shooterInfo;
     }
 
 }

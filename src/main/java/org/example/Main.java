@@ -12,6 +12,8 @@ public class Main {
         int cowboyAmount = input.nextInt();
         input.close();
         ArrayList<Cowboy> cowboys = Cowboy.createCowboyArray(cowboyAmount);
+//        Cowboy.shootCowboy(0, cowboys);
+//        System.out.println(cowboys.get(1).healthPoints);
 
     }
 }

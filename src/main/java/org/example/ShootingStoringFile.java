@@ -7,7 +7,9 @@ import java.nio.file.Files;
 public class ShootingStoringFile {
     public static void saveShootingRound(
             String filePath,
+            int shooterID,
             int shooterIndex,
+            int targetID,
             int targetIndex,
             int targetPrevHealth,
             int damage,
@@ -18,14 +20,18 @@ public class ShootingStoringFile {
         String entry = String.format(
                 """
                 {
+                  "shooterID": %d,
                   "shooterIndex": %d,
+                  "targetID": %d,
                   "targetIndex": %d,
                   "targetPrevHealth": %d,
                   "damage": %d,
                   "targetNewHealth": %d
                 }
                 """,
+                shooterID,
                 shooterIndex,
+                targetID,
                 targetIndex,
                 targetPrevHealth,
                 damage,
