@@ -17,12 +17,32 @@ public class Cowboy {
     public static void createCowboyArray() {
         Scanner input = new Scanner(System.in);
         int cowboysAmount = input.nextInt();
+
+        if (cowboysAmount < 2) {
+            throw new IllegalArgumentException("At least 2 cowboys needed!");
+        }
+
         IntStream.range(0, cowboysAmount).forEach(i -> cowboys.add(new Cowboy(i + 1)));
         input.close();
     }
 
-    public static int defineNextShooterIndex(Cowboy shooter, int targetIndex, int damage) {
-        return (cowboys.get(targetIndex).healthPoints - damage <= 0) ? cowboys.indexOf(shooter) : targetIndex;
+    public static int defineNextShooterIndex(int shooterIndex, int damage) {
+        if (shooterIndex < 0 || shooterIndex >= cowboys.size()) {
+            return -1;
+        }
+
+        int targetIndex = defineNextTargetIndex(shooterIndex);
+        boolean targetKilled = cowboys.get(targetIndex).healthPoints - damage <= 0;
+
+        if (!targetKilled) {
+            return targetIndex;
+        }
+
+        if (targetIndex < shooterIndex) {
+            return shooterIndex - 1;
+        }
+
+        return shooterIndex;
     }
 
     public static int defineNextTargetIndex(int shooterIndex) {
@@ -67,7 +87,6 @@ public class Cowboy {
          ShootingStoringFile.saveShootingRound("shootingLog.json",shooterID,shooterIndex,targetID,targetIndex,damage,targetHealthPoints);
 
         removeDeadCowboy(targetIndex);
-
     }
 
     public static void removeDeadCowboy(int cowboyIndex) {
