@@ -21,6 +21,9 @@ public class Cowboy {
         input.close();
     }
 
+    public static int defineNextShooterIndex(Cowboy shooter, int targetIndex, int damage) {
+        return (cowboys.get(targetIndex).healthPoints - damage <= 0) ? cowboys.indexOf(shooter) : targetIndex;
+    }
 
     public static int defineNextTargetIndex(int shooterIndex) {
         if (cowboys == null || cowboys.size() <= 1) {
@@ -40,7 +43,8 @@ public class Cowboy {
         }
     }
 
-    public static void shootCowboy(int shooterIndex, int targetIndex) {
+
+    public static void shootCowboy(int shooterIndex, int targetIndex, int damage) {
         if (shooterIndex < 0 || shooterIndex >= cowboys.size()) {
             throw new IllegalArgumentException("Shooter index not in cowboys list!");
         }
@@ -53,7 +57,6 @@ public class Cowboy {
             throw new IllegalArgumentException("Shooter can not be his own target!");
          }
 
-        int damage = random.nextInt(1, 6);
         int shooterID = cowboys.get(shooterIndex).id;
         int targetID = cowboys.get(targetIndex).id;
         cowboys.get(targetIndex).healthPoints -= damage;
