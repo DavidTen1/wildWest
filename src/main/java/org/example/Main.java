@@ -8,18 +8,28 @@ public class Main {
 
     public static void documentShooting() {
         Cowboy.createCowboyArray();
-        int nextShooterIndex = random.nextInt(0, cowboys.size());
-    while (cowboys.size() > 1) {
-        int randomDamage = random.nextInt(1,6);
-        int nextTargetIndex =  Cowboy.defineNextTargetIndex(nextShooterIndex );
-        nextShooterIndex =  Cowboy.defineNextShooterIndex(0, randomDamage);
-        Cowboy.shootCowboy(nextShooterIndex,nextTargetIndex , randomDamage);
-    }
+
+        int shooterIndex = random.nextInt(0, cowboys.size());
+
+        while (cowboys.size() > 1) {
+            int damage = random.nextInt(1, 6);
+
+            int targetIndex = Cowboy.defineNextTargetIndex(shooterIndex);
+
+            int nextShooterIndex = Cowboy.defineNextShooterIndex(shooterIndex, damage);
+
+            Cowboy.shootCowboy(shooterIndex, targetIndex, damage);
+
+            shooterIndex = nextShooterIndex;
+        }
+
+        System.out.println("Winner: Cowboy " + cowboys.getFirst().id);
     }
 
 
     public static void main(String[] args) {
         documentShooting();
+
         String checksum = ChecksumTransformation.calculateSHA256("shooting-log.json");
         System.out.println("SHA-256 checksum: " + checksum);
 

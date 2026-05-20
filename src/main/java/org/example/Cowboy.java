@@ -89,7 +89,7 @@ public class Cowboy {
 
         System.out.println("shooter ID " + shooterID +   " tar ID "  + targetID  +  " shooter index " + shooterIndex + " tar index " + targetIndex + " tar health " + targetHealthPoints);
 
-         ShootingStoringFile.saveShootingRound("shootingLog.json",shooterID,shooterIndex,targetID,targetIndex,damage,targetHealthPoints);
+         ShootingStoringFile.saveShootingRound("shooting-log.json",shooterID,shooterIndex,targetID,targetIndex,damage,targetHealthPoints);
 
         removeDeadCowboy(targetIndex);
     }
