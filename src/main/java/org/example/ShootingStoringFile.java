@@ -13,7 +13,6 @@ public class ShootingStoringFile {
             int shooterIndex,
             int targetID,
             int targetIndex,
-            int targetPrevHealth,
             int damage,
             int targetNewHealth
     ) {
@@ -27,7 +26,6 @@ public class ShootingStoringFile {
                   "shooterIndex": %d,
                   "targetID": %d,
                   "targetIndex": %d,
-                  "targetPrevHealth": %d,
                   "damage": %d,
                   "targetNewHealth": %d
                 }
@@ -36,7 +34,6 @@ public class ShootingStoringFile {
                 shooterIndex,
                 targetID,
                 targetIndex,
-                targetPrevHealth,
                 damage,
                 targetNewHealth
         );

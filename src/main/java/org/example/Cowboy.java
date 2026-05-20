@@ -1,56 +1,59 @@
 package org.example;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.stream.IntStream;
 import java.util.Random;
 
 public class Cowboy {
     public final int id;
     public int healthPoints;
-    public Cowboy(int id){
+    public static Random random = new Random();
+    public static ArrayList<Cowboy> cowboys = new ArrayList<>();
+    public Cowboy(int id) {
         this.healthPoints = 10;
         this.id = id;
     }
 
-    public static ArrayList<Cowboy> createCowboyArray(int cowboyAmount){
-        ArrayList<Cowboy> cowboys = new ArrayList<>();
-        IntStream.range(0, cowboyAmount).forEach(i -> cowboys.add(new Cowboy(i)));
-
-    return  cowboys;
+    public static void createCowboyArray() {
+        Scanner input = new Scanner(System.in);
+        int cowboysAmount = input.nextInt();
+        IntStream.range(0, cowboysAmount).forEach(i -> cowboys.add(new Cowboy(i)));
+        input.close();
     }
 
-    public static void shootCowboy(int shooterIndex, ArrayList<Cowboy> cowboys) {
-        if (cowboys.size() <= 1) {
-            return;
+    public static int defineNextTargetIndex(int shooterIndex, ArrayList<Cowboy> cowboys) {
+
+        if (cowboys == null || cowboys.size() <= 1 || shooterIndex < 0 || shooterIndex >= cowboys.size()) {
+            return -1;
         }
 
-        Random random = new Random();
+        if (cowboys.get(shooterIndex).healthPoints % 2 == 0) {
+            // even HP -> shoot right
+            return (shooterIndex + 1) % cowboys.size();
+        } else {
+            // odd HP -> shoot left
+            return (shooterIndex - 1 + cowboys.size()) % cowboys.size();
+        }
+    }
+
+    public static void shootCowboy(int shooterIndex, int targetIndex) {
         int damage = random.nextInt(1, 6);
-        Cowboy shooter = cowboys.get(shooterIndex);
+        int shooterID = cowboys.get(shooterIndex).id;
+        int targetID = cowboys.get(targetIndex).id;
+        cowboys.get(targetIndex).healthPoints -= damage;
+        int targetHealthPoints = cowboys.get(targetIndex).healthPoints;
 
-        int targetIndex = (shooter.healthPoints % 2 != 0) ? (shooterIndex == 0 ? cowboys.size() - 1 : shooterIndex - 1)
-                : (shooterIndex == cowboys.size() - 1 ? 0 : shooterIndex + 1);
+        System.out.println("shooter ID " + shooterID +   " tar ID "  + targetID  +  " shooter index " + shooterIndex + " tar index " + targetIndex + " tar health " + targetHealthPoints);
 
-        Cowboy target = cowboys.get(targetIndex);
-        int targetPrevHealth = target.healthPoints;
-        target.healthPoints -= damage;
+         removeDeadCowboy(targetIndex);
+    }
 
+    public static void removeDeadCowboy(int cowboyIndex) {
+        if (cowboys.get(cowboyIndex).healthPoints <= 0) {
+            System.out.println("cowboy " + cowboys.get(cowboyIndex).id+ " killed");
+            cowboys.remove(cowboyIndex);
 
-
-        if (target.healthPoints <= 0) {
-            cowboys.remove(targetIndex);
         }
-
-        ShootingStoringFile.saveShootingRound(
-                "shooting-log.json",
-                shooter.id,
-                shooterIndex,
-                target.id,
-                targetIndex,
-                targetPrevHealth,
-                damage,
-                target.healthPoints
-        );
-
     }
 
 }
