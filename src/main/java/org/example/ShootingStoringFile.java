@@ -1,8 +1,10 @@
 package org.example;
+
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class ShootingStoringFile {
     public static void saveShootingRound(
@@ -15,7 +17,8 @@ public class ShootingStoringFile {
             int damage,
             int targetNewHealth
     ) {
-        File file = new File(filePath);
+        Path path = Path.of(filePath);
+        File file = path.toFile();
 
         String entry = String.format(
                 """
@@ -40,25 +43,30 @@ public class ShootingStoringFile {
 
         try {
             if (!file.exists() || file.length() == 0) {
-                try (FileWriter writer = new FileWriter(file)) {
-                    writer.write("[\n");
-                    writer.write(entry);
-                    writer.write("\n]");
-                }
-            } else {
-                String content = Files.readString(file.toPath()).trim();
+                String content = "[\n" + entry + "\n]";
 
-                // Remove the final closing bracket ]
+                Files.writeString(
+                        path,
+                        content,
+                        StandardCharsets.UTF_8
+                );
+            } else {
+                String content = Files.readString(
+                        path,
+                        StandardCharsets.UTF_8
+                ).trim();
+
                 if (content.endsWith("]")) {
                     content = content.substring(0, content.length() - 1).trim();
                 }
 
-                try (FileWriter writer = new FileWriter(file)) {
-                    writer.write(content);
-                    writer.write(",\n");
-                    writer.write(entry);
-                    writer.write("\n]");
-                }
+                String newContent = content + ",\n" + entry + "\n]";
+
+                Files.writeString(
+                        path,
+                        newContent,
+                        StandardCharsets.UTF_8
+                );
             }
         } catch (IOException e) {
             System.out.println("Could not save shooting round: " + e.getMessage());
