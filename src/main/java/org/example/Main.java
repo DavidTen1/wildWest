@@ -1,23 +1,27 @@
 package org.example;
+import static org.example.Cowboy.cowboys;
 import static org.example.Cowboy.random;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
 
-    public static void docShooting() {
-
+    public static void documentShooting() {
+        Cowboy.createCowboyArray();
+        int nextShooterIndex = random.nextInt(0, cowboys.size());
+    while (cowboys.size() > 1) {
+        int randomDamage = random.nextInt(1,6);
+        int nextTargetIndex =  Cowboy.defineNextTargetIndex(nextShooterIndex );
+        nextShooterIndex =  Cowboy.defineNextShooterIndex(0, randomDamage);
+        Cowboy.shootCowboy(nextShooterIndex,nextTargetIndex , randomDamage);
+    }
     }
 
 
     public static void main(String[] args) {
-    Cowboy.createCowboyArray();
-    Cowboy.shootCowboy(0,1 , random.nextInt(6));
-     System.out.println("next target " + Cowboy.defineNextTargetIndex(0));
-
-//        String checksum = ChecksumTransformation.calculateSHA256("shooting-log.json");
-//
-//        System.out.println("SHA-256 checksum: " + checksum);
+        documentShooting();
+        String checksum = ChecksumTransformation.calculateSHA256("shooting-log.json");
+        System.out.println("SHA-256 checksum: " + checksum);
 
     }
 }

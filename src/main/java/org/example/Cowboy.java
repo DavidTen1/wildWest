@@ -19,6 +19,7 @@ public class Cowboy {
         int cowboysAmount = input.nextInt();
 
         if (cowboysAmount < 2) {
+            input.close();
             throw new IllegalArgumentException("At least 2 cowboys needed!");
         }
 
@@ -27,9 +28,10 @@ public class Cowboy {
     }
 
     public static int defineNextShooterIndex(int shooterIndex, int damage) {
-        if (shooterIndex < 0 || shooterIndex >= cowboys.size()) {
+        if (shooterIndex < 0 || shooterIndex >= cowboys.size() || cowboys == null || cowboys.size() <= 1 || damage < 1 || damage > 5) {
             return -1;
         }
+
 
         int targetIndex = defineNextTargetIndex(shooterIndex);
         boolean targetKilled = cowboys.get(targetIndex).healthPoints - damage <= 0;
@@ -76,6 +78,9 @@ public class Cowboy {
         if (shooterIndex == targetIndex) {
             throw new IllegalArgumentException("Shooter can not be his own target!");
          }
+        if(damage < 1 || damage > 5){
+            throw new IllegalArgumentException("Damage must be between 1 and 5!");
+        }
 
         int shooterID = cowboys.get(shooterIndex).id;
         int targetID = cowboys.get(targetIndex).id;
