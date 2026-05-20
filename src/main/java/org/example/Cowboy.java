@@ -17,26 +17,42 @@ public class Cowboy {
     public static void createCowboyArray() {
         Scanner input = new Scanner(System.in);
         int cowboysAmount = input.nextInt();
-        IntStream.range(0, cowboysAmount).forEach(i -> cowboys.add(new Cowboy(i)));
+        IntStream.range(0, cowboysAmount).forEach(i -> cowboys.add(new Cowboy(i + 1)));
         input.close();
     }
 
-    public static int defineNextTargetIndex(int shooterIndex, ArrayList<Cowboy> cowboys) {
 
-        if (cowboys == null || cowboys.size() <= 1 || shooterIndex < 0 || shooterIndex >= cowboys.size()) {
-            return -1;
+    public static int defineNextTargetIndex(int shooterIndex) {
+        if (cowboys == null || cowboys.size() <= 1) {
+            throw new IllegalArgumentException("You needed at least 2 cowboys!");
         }
 
-        if (cowboys.get(shooterIndex).healthPoints % 2 == 0) {
-            // even HP -> shoot right
+        if (shooterIndex < 0 || shooterIndex >= cowboys.size()) {
+            throw new IllegalArgumentException("Index not in cowboys list!");
+        }
+
+        Cowboy shooter = cowboys.get(shooterIndex);
+
+        if (shooter.healthPoints % 2 == 0) {
             return (shooterIndex + 1) % cowboys.size();
         } else {
-            // odd HP -> shoot left
             return (shooterIndex - 1 + cowboys.size()) % cowboys.size();
         }
     }
 
     public static void shootCowboy(int shooterIndex, int targetIndex) {
+        if (shooterIndex < 0 || shooterIndex >= cowboys.size()) {
+            throw new IllegalArgumentException("Shooter index not in cowboys list!");
+        }
+
+        if (targetIndex < 0 || targetIndex >= cowboys.size()) {
+            throw new IllegalArgumentException("Target index not in cowboys list!");
+        }
+
+        if (shooterIndex == targetIndex) {
+            throw new IllegalArgumentException("Shooter can not be his own target!");
+         }
+
         int damage = random.nextInt(1, 6);
         int shooterID = cowboys.get(shooterIndex).id;
         int targetID = cowboys.get(targetIndex).id;
@@ -45,14 +61,18 @@ public class Cowboy {
 
         System.out.println("shooter ID " + shooterID +   " tar ID "  + targetID  +  " shooter index " + shooterIndex + " tar index " + targetIndex + " tar health " + targetHealthPoints);
 
-         removeDeadCowboy(targetIndex);
+         ShootingStoringFile.saveShootingRound("shootingLog.json",shooterID,shooterIndex,targetID,targetIndex,damage,targetHealthPoints);
+
+        removeDeadCowboy(targetIndex);
+
     }
 
     public static void removeDeadCowboy(int cowboyIndex) {
-        if (cowboys.get(cowboyIndex).healthPoints <= 0) {
-            System.out.println("cowboy " + cowboys.get(cowboyIndex).id+ " killed");
-            cowboys.remove(cowboyIndex);
-
+        if (cowboyIndex >= 0 && cowboyIndex < cowboys.size()) {
+            if (cowboys.get(cowboyIndex).healthPoints <= 0) {
+                System.out.println("cowboy " + cowboys.get(cowboyIndex).id+ " killed");
+                cowboys.remove(cowboyIndex);
+            }
         }
     }
 
