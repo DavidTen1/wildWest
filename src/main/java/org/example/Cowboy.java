@@ -31,8 +31,8 @@ public class Cowboy {
     }
 
     public static int defineNextShooterIndex(int shooterIndex, int damage) {
-        if (shooterIndex < 0 || shooterIndex >= cowboys.size() ||
-                cowboys == null || cowboys.size() <= 1 || damage < 1 || damage > 5) {
+        if (cowboys == null || cowboys.size() <= 1 ||
+                shooterIndex < 0 || shooterIndex >= cowboys.size() || damage < 1 || damage > 5) {
             return -1;
         }
 
