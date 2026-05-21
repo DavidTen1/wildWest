@@ -2,8 +2,6 @@ package org.example;
 import static org.example.Cowboy.cowboys;
 import static org.example.Cowboy.random;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
 
     public static void documentShooting() {
@@ -11,15 +9,20 @@ public class Main {
 
         int shooterIndex = random.nextInt(0, cowboys.size());
 
+        // Continue the shootout until only one cowboy remains.
         while (cowboys.size() > 1) {
+
             int damage = random.nextInt(1, 6);
 
             int targetIndex = Cowboy.defineNextTargetIndex(shooterIndex);
 
             int nextShooterIndex = Cowboy.defineNextShooterIndex(shooterIndex, damage);
 
+            // the attacker shoots his target, draining from 1 to 6 health points from the latter,
             Cowboy.shootCowboy(shooterIndex, targetIndex, damage);
 
+            // the next shooter will either be the current shooter or his target (if alive)
+            // Beware that the target if killed is removed from array, so the cowboy array list indexes get changed.
             shooterIndex = nextShooterIndex;
         }
 
@@ -30,8 +33,8 @@ public class Main {
     public static void main(String[] args) {
         documentShooting();
 
-        String checksum = ChecksumTransformation.calculateSHA256("shooting-log.json");
-        System.out.println("SHA-256 checksum: " + checksum);
-
+        // Calculate and print the checksum of the completed protocol file.
+        String checksum = ChecksumTransformation.calculateSHA512("shooting-log.json");
+        System.out.println("SHA-512 checksum: " + checksum);
     }
 }

@@ -1,4 +1,5 @@
 package org.example;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.stream.IntStream;
@@ -9,6 +10,7 @@ public class Cowboy {
     public int healthPoints;
     public static Random random = new Random();
     public static ArrayList<Cowboy> cowboys = new ArrayList<>();
+
     public Cowboy(int id) {
         this.healthPoints = 10;
         this.id = id;
@@ -16,6 +18,7 @@ public class Cowboy {
 
     public static void createCowboyArray() {
         Scanner input = new Scanner(System.in);
+        System.out.println("Enter cowboys amount: ");
         int cowboysAmount = input.nextInt();
 
         if (cowboysAmount < 2) {
@@ -28,22 +31,25 @@ public class Cowboy {
     }
 
     public static int defineNextShooterIndex(int shooterIndex, int damage) {
-        if (shooterIndex < 0 || shooterIndex >= cowboys.size() || cowboys == null || cowboys.size() <= 1 || damage < 1 || damage > 5) {
+        if (shooterIndex < 0 || shooterIndex >= cowboys.size() ||
+                cowboys == null || cowboys.size() <= 1 || damage < 1 || damage > 5) {
             return -1;
         }
 
-
         int targetIndex = defineNextTargetIndex(shooterIndex);
+
+        // Will the target die from the current shot?
         boolean targetKilled = cowboys.get(targetIndex).healthPoints - damage <= 0;
 
         if (!targetKilled) {
+            // target becomes the next shooter if alive.
             return targetIndex;
         }
 
         if (targetIndex < shooterIndex) {
             return shooterIndex - 1;
         }
-
+        // Default: if the target dies, the shooter stays the shooter.
         return shooterIndex;
     }
 
@@ -84,12 +90,27 @@ public class Cowboy {
 
         int shooterID = cowboys.get(shooterIndex).id;
         int targetID = cowboys.get(targetIndex).id;
+
+        // Damage the target.
         cowboys.get(targetIndex).healthPoints -= damage;
         int targetHealthPoints = cowboys.get(targetIndex).healthPoints;
 
-        System.out.println("shooter ID " + shooterID +   " tar ID "  + targetID  +  " shooter index " + shooterIndex + " tar index " + targetIndex + " tar health " + targetHealthPoints);
+        System.out.println(
+                "shooter ID " + shooterID +
+                " tar ID "  + targetID  +
+                " shooter index " + shooterIndex +
+                        " tar index " + targetIndex +
+                        " tar health " + targetHealthPoints);
 
-         ShootingStoringFile.saveShootingRound("shooting-log.json",shooterID,shooterIndex,targetID,targetIndex,damage,targetHealthPoints);
+        // Store info about the shot in the JSON protocol file.
+         ShootingStoringFile.saveShootingRound(
+                 "shooting-log.json",
+                 shooterID,
+                 shooterIndex,
+                 targetID,
+                 targetIndex,
+                 damage,
+                 targetHealthPoints);
 
         removeDeadCowboy(targetIndex);
     }

@@ -16,54 +16,33 @@ public class ShootingStoringFile {
             int damage,
             int targetNewHealth
     ) {
-        Path path = Path.of(filePath);
-        File file = path.toFile();
+        Path shootingsFilePath = Path.of(filePath);
+        File shootingsFile =  shootingsFilePath.toFile();
 
+        // JSON object for one shot in the shooting protocol.
         String entry = String.format(
                 """
-                {
-                  "shooterID": %d,
-                  "shooterIndex": %d,
-                  "targetID": %d,
-                  "targetIndex": %d,
-                  "damage": %d,
-                  "targetNewHealth": %d
-                }
+                { "shooterID": %d, "shooterIndex": %d, "targetID": %d, "targetIndex": %d, "damage": %d, "targetNewHealth": %d}
                 """,
-                shooterID,
-                shooterIndex,
-                targetID,
-                targetIndex,
-                damage,
-                targetNewHealth
-        );
+                shooterID, shooterIndex, targetID, targetIndex, damage, targetNewHealth);
 
         try {
-            if (!file.exists() || file.length() == 0) {
+            // if first shot: create a new JSON file and array.
+            if (!shootingsFile.exists() || shootingsFile.length() == 0) {
                 String content = "[\n" + entry + "\n]";
+                Files.writeString(shootingsFilePath, content, StandardCharsets.UTF_8);
 
-                Files.writeString(
-                        path,
-                        content,
-                        StandardCharsets.UTF_8
-                );
             } else {
-                String content = Files.readString(
-                        path,
-                        StandardCharsets.UTF_8
-                ).trim();
+                // Further shots: read current JSON array and remove the closing bracket.
+                String shootingsFileContent = Files.readString(shootingsFilePath, StandardCharsets.UTF_8).trim();
 
-                if (content.endsWith("]")) {
-                    content = content.substring(0, content.length() - 1).trim();
+                if (shootingsFileContent.endsWith("]")) {
+                    shootingsFileContent = shootingsFileContent.substring(0, shootingsFileContent.length() - 1).trim();
                 }
-
-                String newContent = content + ",\n" + entry + "\n]";
-
-                Files.writeString(
-                        path,
-                        newContent,
-                        StandardCharsets.UTF_8
-                );
+                
+                // Append the new shot and close the JSON array again.
+                String shootingStatusContent = shootingsFileContent + ",\n" + entry + "\n]";
+                Files.writeString(shootingsFilePath, shootingStatusContent, StandardCharsets.UTF_8);
             }
         } catch (IOException e) {
             System.out.println("Could not save shooting round: " + e.getMessage());
