@@ -90,25 +90,28 @@ public class Cowboy {
 
         int shooterID = cowboys.get(shooterIndex).id;
         int targetID = cowboys.get(targetIndex).id;
-
+        int shooterHealthPoints = cowboys.get(shooterIndex).healthPoints;
         // Damage the target.
         cowboys.get(targetIndex).healthPoints -= damage;
         int targetHealthPoints = cowboys.get(targetIndex).healthPoints;
         int targetPrevHealthPoints = targetHealthPoints + damage;
         System.out.println(
-                "shooter ID " + shooterID +
-                " target ID "  + targetID  +
-                " shooter index " + shooterIndex +
-                        " target index " + targetIndex +
-                        " target prev health " + targetPrevHealthPoints +
-                        " damage " + damage +
-                        " target current health " + targetHealthPoints);
+                "Shooter ID: " + shooterID +
+                        ", Target ID: " + targetID +
+                        ", Shooter HP: " + shooterHealthPoints +
+                        ", Shooter index: " + shooterIndex +
+                        ", Target index: " + targetIndex +
+                        ", Target previous HP: " + targetPrevHealthPoints +
+                        ", Damage: " + damage +
+                        ", Target current HP: " + targetHealthPoints
+        );
 
         // Store info about the shot in the JSON protocol file.
          ShootingStoringFile.saveShootingRound(
                  "shooting-log.json",
                  shooterID,
                  shooterIndex,
+                 shooterHealthPoints,
                  targetID,
                  targetIndex,
                  targetPrevHealthPoints,

@@ -7,10 +7,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ShootingStoringFile {
+
+    // resets file for clean up if a new shooting round
+    public static void resetFile(String filePath) {
+        try {
+            Files.deleteIfExists(Path.of(filePath));
+        } catch (IOException e) {
+            throw new RuntimeException("Could not reset protocol file: " + filePath, e);
+        }
+    }
+
+
     public static void saveShootingRound(
             String filePath,
             int shooterID,
             int shooterIndex,
+            int shooterHealth,
             int targetID,
             int targetIndex,
             int targetPrevHealthPoints,
@@ -19,13 +31,12 @@ public class ShootingStoringFile {
     ) {
         Path shootingsFilePath = Path.of(filePath);
         File shootingsFile =  shootingsFilePath.toFile();
-
         // JSON object for one shot in the shooting protocol.
         String entry = String.format(
                 """
-                { "shooterID": %d, "shooterIndex": %d, "targetID": %d, "targetIndex": %d,"targetPrevHealthPoints" : %d ,"damage": %d, "targetNewHealth": %d}
+                { "shooterID": %d, "shooterIndex": %d,"shooterHealth": %d, "targetID": %d, "targetIndex": %d,"targetPrevHealthPoints" : %d ,"damage": %d, "targetNewHealth": %d}
                 """,
-                shooterID, shooterIndex, targetID, targetIndex, targetPrevHealthPoints,damage, targetNewHealth);
+                shooterID, shooterIndex,shooterHealth ,targetID, targetIndex, targetPrevHealthPoints,damage, targetNewHealth);
 
         try {
             // if first shot: create a new JSON file and array.
