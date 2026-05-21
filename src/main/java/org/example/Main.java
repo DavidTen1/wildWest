@@ -31,10 +31,12 @@ public class Main {
 
 
     public static void main(String[] args) {
+        String fileName = "shooting-log.json";
+        ShootingStoringFile.resetFile(fileName);
         documentShooting();
 
         // Calculate and print the checksum of the completed protocol file.
-        String checksum = ChecksumTransformation.calculateSHA512("shooting-log.json");
+        String checksum = ChecksumTransformation.calculateSHA512(fileName);
         System.out.println("SHA-512 checksum: " + checksum);
     }
 }
