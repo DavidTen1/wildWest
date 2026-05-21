@@ -13,6 +13,7 @@ public class ShootingStoringFile {
             int shooterIndex,
             int targetID,
             int targetIndex,
+            int targetPrevHealthPoints,
             int damage,
             int targetNewHealth
     ) {
@@ -22,9 +23,9 @@ public class ShootingStoringFile {
         // JSON object for one shot in the shooting protocol.
         String entry = String.format(
                 """
-                { "shooterID": %d, "shooterIndex": %d, "targetID": %d, "targetIndex": %d, "damage": %d, "targetNewHealth": %d}
+                { "shooterID": %d, "shooterIndex": %d, "targetID": %d, "targetIndex": %d,"targetPrevHealthPoints" : %d ,"damage": %d, "targetNewHealth": %d}
                 """,
-                shooterID, shooterIndex, targetID, targetIndex, damage, targetNewHealth);
+                shooterID, shooterIndex, targetID, targetIndex, targetPrevHealthPoints,damage, targetNewHealth);
 
         try {
             // if first shot: create a new JSON file and array.
