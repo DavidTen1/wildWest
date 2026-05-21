@@ -8,7 +8,7 @@ import java.nio.file.Path;
 
 public class ShootingStoringFile {
 
-    // resets file for clean up if a new shooting round
+    // resets file for clean up each time if the app is launched, only showing the current shooting's round
     public static void resetFile(String filePath) {
         try {
             Files.deleteIfExists(Path.of(filePath));
