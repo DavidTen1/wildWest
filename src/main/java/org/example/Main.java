@@ -33,6 +33,7 @@ public class Main {
     public static void main(String[] args) {
         String shootingsFile = "shooting-log.json";
         String checksumFile = "shooting-log.sha512";
+
         String checksumStatusString = ChecksumTransformation.checkChecksum(shootingsFile, checksumFile) ?
                 "Checksum valid. Protocol unchanged." : "Checksum not valid or found.";
 
