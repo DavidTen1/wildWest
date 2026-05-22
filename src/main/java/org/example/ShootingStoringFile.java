@@ -8,7 +8,7 @@ import java.nio.file.Path;
 
 public class ShootingStoringFile {
 
-    // resets file for clean up each time if the app is launched, only showing the current shooting's round
+    // Removes the old file so each shootout begins with a clean protocol.
     public static void resetFile(String filePath) {
         try {
             Files.deleteIfExists(Path.of(filePath));
@@ -30,16 +30,33 @@ public class ShootingStoringFile {
             int targetNewHealth
     ) {
         Path shootingsFilePath = Path.of(filePath);
-        File shootingsFile =  shootingsFilePath.toFile();
-        // JSON object for one shot in the shooting protocol.
+        File shootingsFile = shootingsFilePath.toFile();
+        // JSON object for one shot in the shootout protocol.
         String entry = String.format(
                 """
-                { "shooterID": %d, "shooterIndex": %d,"shooterHealth": %d, "targetID": %d, "targetIndex": %d,"targetPrevHealthPoints" : %d ,"damage": %d, "targetNewHealth": %d}
+                {
+                  "shooterID": %d,
+                  "shooterIndex": %d,
+                  "shooterHealth": %d,
+                  "targetID": %d,
+                  "targetIndex": %d,
+                  "targetPrevHealthPoints": %d,
+                  "damage": %d,
+                  "targetNewHealth": %d
+                }
                 """,
-                shooterID, shooterIndex,shooterHealth ,targetID, targetIndex, targetPrevHealthPoints,damage, targetNewHealth);
+                shooterID,
+                shooterIndex,
+                shooterHealth,
+                targetID,
+                targetIndex,
+                targetPrevHealthPoints,
+                damage,
+                targetNewHealth
+        );
 
         try {
-            // if first shot: create a new JSON file and array.
+            // First shot: create a new JSON file and array.
             if (!shootingsFile.exists() || shootingsFile.length() == 0) {
                 String content = "[\n" + entry + "\n]";
                 Files.writeString(shootingsFilePath, content, StandardCharsets.UTF_8);

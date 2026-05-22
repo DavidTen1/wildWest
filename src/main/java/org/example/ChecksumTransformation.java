@@ -16,18 +16,18 @@ public class ChecksumTransformation {
 
             // Create a SHA-512 digest and calculate the hash of the file bytes.
             MessageDigest digest = MessageDigest.getInstance("SHA-512");
-            byte[] hashBytes = digest.digest(shootingsFileBytes );
+            byte[] hashBytes = digest.digest(shootingsFileBytes);
 
-            // Transform the binary hash into hexadecimal content
+            // Transform the binary hash into hexadecimal text
             return bytesToHex(hashBytes);
 
         }
 
-        // error if file does not exist
+        // error if protocol file is not readable
         catch (IOException e) {
             throw new RuntimeException("Could not read file for checksum: " + filePath, e);
         }
-        // error if hash algo does not exist
+        // Error if the hash algorithm is not available.
         catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("SHA-512 algorithm not available", e);
         }
@@ -63,7 +63,6 @@ public class ChecksumTransformation {
                     StandardCharsets.UTF_8
             ).trim();
 
-            System.out.println("Current checksum: " + currentChecksum+ "savedChecksum: " + savedChecksum);
             return currentChecksum.equals(savedChecksum);
 
         } catch (IOException e) {
@@ -74,7 +73,7 @@ public class ChecksumTransformation {
     private static String bytesToHex(byte[] bytes) {
         StringBuilder hexString = new StringBuilder();
 
-        // Each byte becomes a combo of 2 hex characters
+        // Transform every byte into 2 hexadecimal characters.
         for (byte b : bytes) {
             hexString.append(String.format("%02x", b));
         }

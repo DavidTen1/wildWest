@@ -18,7 +18,7 @@ public class Main {
 
             int nextShooterIndex = Cowboy.defineNextShooterIndex(shooterIndex, damage);
 
-            // the attacker shoots his target, draining from 1 to 6 health points from the latter,
+            // The attacker shoots the target, causing damage of 1-5 health points.
             Cowboy.shootCowboy(shooterIndex, targetIndex, damage);
 
             // the next shooter will either be the current shooter or his target (if alive)
@@ -26,7 +26,7 @@ public class Main {
             shooterIndex = nextShooterIndex;
         }
 
-        System.out.println("Winner: Cowboy " + cowboys.getFirst().id);
+        System.out.println("Winner: Cowboy " + cowboys.get(0).id);
     }
 
 
@@ -35,7 +35,7 @@ public class Main {
         String checksumFile = "shooting-log.sha512";
 
         String checksumStatusString = ChecksumTransformation.checkChecksum(shootingsFile, checksumFile) ?
-                "Checksum valid. Protocol unchanged." : "Checksum not valid or found.";
+                "Valid. Protocol unchanged." : "Invalid or not found.";
 
         System.out.println("Checksum status: " + checksumStatusString);
         ShootingStoringFile.resetFile(shootingsFile);

@@ -47,6 +47,7 @@ public class Cowboy {
         }
 
         if (targetIndex < shooterIndex) {
+            // If a target before the shooter is removed, the shooter shifts one index left.
             return shooterIndex - 1;
         }
         // Default: if the target dies, the shooter stays the shooter.
@@ -84,7 +85,7 @@ public class Cowboy {
         if (shooterIndex == targetIndex) {
             throw new IllegalArgumentException("Shooter can not be his own target!");
          }
-        if(damage < 1 || damage > 5){
+        if (damage < 1 || damage > 5) {
             throw new IllegalArgumentException("Damage must be between 1 and 5!");
         }
 
@@ -124,7 +125,7 @@ public class Cowboy {
     public static void removeDeadCowboy(int cowboyIndex) {
         if (cowboyIndex >= 0 && cowboyIndex < cowboys.size()) {
             if (cowboys.get(cowboyIndex).healthPoints <= 0) {
-                System.out.println("cowboy " + cowboys.get(cowboyIndex).id+ " killed");
+                System.out.println("Cowboy " + cowboys.get(cowboyIndex).id + " killed");
                 cowboys.remove(cowboyIndex);
             }
         }
