@@ -16,18 +16,12 @@ public class Cowboy {
         this.id = id;
     }
 
-    public static void createCowboyArray() {
-        Scanner input = new Scanner(System.in);
-        System.out.println("Enter cowboys amount: ");
-        int cowboysAmount = input.nextInt();
-
+    public static void createCowboyArray(int cowboysAmount) {
         if (cowboysAmount < 2) {
-            input.close();
             throw new IllegalArgumentException("At least 2 cowboys needed!");
         }
 
         IntStream.range(0, cowboysAmount).forEach(i -> cowboys.add(new Cowboy(i + 1)));
-        input.close();
     }
 
     public static int defineNextShooterIndex(int shooterIndex, int damage) {
@@ -42,7 +36,7 @@ public class Cowboy {
         boolean targetKilled = cowboys.get(targetIndex).healthPoints - damage <= 0;
 
         if (!targetKilled) {
-            // target becomes the next shooter if alive.
+            // Target becomes the next shooter if alive.
             return targetIndex;
         }
 
@@ -50,7 +44,7 @@ public class Cowboy {
             // If a target before the shooter is removed, the shooter shifts one index left.
             return shooterIndex - 1;
         }
-        // Default: if the target dies, the shooter stays the shooter.
+        // If the target dies, the shooter stays the shooter.
         return shooterIndex;
     }
 
@@ -108,7 +102,7 @@ public class Cowboy {
         );
 
         // Store info about the shot in the JSON protocol file.
-         ShootingStoringFile.saveShootingRound(
+        ShootingStoringFile.saveShootingRound(
                  "shooting-log.json",
                  shooterID,
                  shooterIndex,

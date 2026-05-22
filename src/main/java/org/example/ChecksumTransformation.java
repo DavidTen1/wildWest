@@ -18,12 +18,12 @@ public class ChecksumTransformation {
             MessageDigest digest = MessageDigest.getInstance("SHA-512");
             byte[] hashBytes = digest.digest(shootingsFileBytes);
 
-            // Transform the binary hash into hexadecimal text
+            // Turn the binary hash into hexadecimal text
             return bytesToHex(hashBytes);
 
         }
 
-        // error if protocol file is not readable
+        // Error if protocol file is not readable
         catch (IOException e) {
             throw new RuntimeException("Could not read file for checksum: " + filePath, e);
         }
@@ -55,7 +55,7 @@ public class ChecksumTransformation {
         }
 
         try {
-            // compares checksum of current shooting protocol with the previous original checksum
+            // Compare the current protocol checksum with the saved checksum.
             String currentChecksum = calculateSHA512(logFilePath);
 
             String savedChecksum = Files.readString(
@@ -73,11 +73,11 @@ public class ChecksumTransformation {
     private static String bytesToHex(byte[] bytes) {
         StringBuilder hexString = new StringBuilder();
 
-        // Transform every byte into 2 hexadecimal characters.
+        // Convert every byte into 2 hexadecimal characters.
         for (byte b : bytes) {
             hexString.append(String.format("%02x", b));
         }
-        // return string of hex characters
+        // Return hexadecimal string.
         return hexString.toString();
     }
 }

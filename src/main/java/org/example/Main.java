@@ -1,11 +1,13 @@
 package org.example;
+import java.util.Scanner;
+
 import static org.example.Cowboy.cowboys;
 import static org.example.Cowboy.random;
 
 public class Main {
 
-    public static void documentShooting() {
-        Cowboy.createCowboyArray();
+    public static void documentShooting(int cowboysAmount) {
+        Cowboy.createCowboyArray(cowboysAmount);
 
         int shooterIndex = random.nextInt(0, cowboys.size());
 
@@ -18,11 +20,11 @@ public class Main {
 
             int nextShooterIndex = Cowboy.defineNextShooterIndex(shooterIndex, damage);
 
-            // The attacker shoots the target, causing damage of 1-5 health points.
+            // The attacker shoots the target, causing 1-5 health points as damage.
             Cowboy.shootCowboy(shooterIndex, targetIndex, damage);
 
-            // the next shooter will either be the current shooter or his target (if alive)
-            // Beware that the target if killed is removed from array, so the cowboy array list indexes get changed.
+            // the next shooter will either be the current shooter or his target if still alive
+            // Beware: If the target is killed, it is removed and the list indexes may change.
             shooterIndex = nextShooterIndex;
         }
 
@@ -36,11 +38,17 @@ public class Main {
 
         String checksumStatusString = ChecksumTransformation.checkChecksum(shootingsFile, checksumFile) ?
                 "Valid. Protocol unchanged." : "Invalid or not found.";
-
         System.out.println("Checksum status: " + checksumStatusString);
+
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter cowboys amount:");
+        int cowboysAmount = input.nextInt();
+        input.close();
+
+
         ShootingStoringFile.resetFile(shootingsFile);
         ShootingStoringFile.resetFile(checksumFile);
-        documentShooting();
+        documentShooting(cowboysAmount);
 
         // Calculate and print the checksum of the completed protocol file.
         String checksum = ChecksumTransformation.calculateSHA512(shootingsFile);

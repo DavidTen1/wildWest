@@ -63,10 +63,13 @@ public class ShootingStoringFile {
 
             } else {
                 // Further shots: read current JSON array and remove the closing bracket.
-                String shootingsFileContent = Files.readString(shootingsFilePath, StandardCharsets.UTF_8).trim();
+                String shootingsFileContent = Files.
+                        readString(shootingsFilePath, StandardCharsets.UTF_8)
+                        .trim();
 
                 if (shootingsFileContent.endsWith("]")) {
-                    shootingsFileContent = shootingsFileContent.substring(0, shootingsFileContent.length() - 1).trim();
+                    shootingsFileContent = shootingsFileContent.substring(0, shootingsFileContent.length() - 1)
+                            .trim();
                 }
                 
                 // Append the new shot and close the JSON array again.
