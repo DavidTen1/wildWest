@@ -31,12 +31,19 @@ public class Main {
 
 
     public static void main(String[] args) {
-        String fileName = "shooting-log.json";
-        ShootingStoringFile.resetFile(fileName);
+        String shootingsFile = "shooting-log.json";
+        String checksumFile = "shooting-log.sha512";
+        String checksumStatusString = ChecksumTransformation.checkChecksum(shootingsFile, checksumFile) ?
+                "Checksum valid. Protocol unchanged." : "Checksum not valid or found.";
+
+        System.out.println("Checksum status: " + checksumStatusString);
+        ShootingStoringFile.resetFile(shootingsFile);
+        ShootingStoringFile.resetFile(checksumFile);
         documentShooting();
 
         // Calculate and print the checksum of the completed protocol file.
-        String checksum = ChecksumTransformation.calculateSHA512(fileName);
+        String checksum = ChecksumTransformation.calculateSHA512(shootingsFile);
         System.out.println("SHA-512 checksum: " + checksum);
+        ChecksumTransformation.saveChecksum(checksum, checksumFile);
     }
 }
